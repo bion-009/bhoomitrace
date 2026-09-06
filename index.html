@@ -1,203 +1,134 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BhoomiTrace | Uttarakhand Land Record Analyzer</title>
-<style>
-:root{--b:#2563eb;--bd:#dbe3ef;--ink:#172033;--muted:#667085;--bg:#f5f7fb;--card:#fff;--ok:#15803d;--warn:#b45309;--err:#b42318}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px system-ui,-apple-system,"Noto Sans Devanagari","Nirmala UI",sans-serif}
-header{background:linear-gradient(135deg,#102a56,#2563eb);color:#fff;padding:15px 4%;display:flex;justify-content:space-between;align-items:center}
-.brand{display:flex;gap:11px;align-items:center}.logo{width:42px;height:42px;background:#fff;color:var(--b);border-radius:12px;display:grid;place-items:center;font-weight:900;font-size:20px}
-h1{font-size:19px;margin:0}header small{opacity:.8}main{width:min(1250px,94%);margin:25px auto 45px}
-.hero{text-align:center;margin-bottom:20px}.hero h2{font-size:28px;margin:0 0 6px}.hero p,.hint{color:var(--muted);font-size:12px}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:17px;padding:19px;margin-bottom:15px;box-shadow:0 7px 25px #1018280a}
-h3{margin:0 0 5px}.drop{border:2px dashed #b8cff9;background:#f8fbff;border-radius:14px;padding:27px;text-align:center;margin-top:14px;cursor:pointer}
-.drop:hover{background:#f0f6ff}.ico{font-size:32px}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:750;cursor:pointer}.primary{background:var(--b);color:#fff}.secondary{background:#e9f1ff;color:#174ea6}.ghost{background:#eef1f5;color:#344054}.danger{background:#fff0f0;color:#a61b1b}
-.files{margin-top:10px}.file{display:flex;justify-content:space-between;border:1px solid var(--bd);padding:9px 11px;border-radius:9px;margin-top:6px}
-.notice{padding:11px 13px;border-radius:10px;background:#eff6ff;color:#174ea6;margin-top:11px;font-size:12px}.success{background:#ecfdf3;color:#166534}.warning{background:#fff7ed;color:#9a3412}.error{background:#fef2f2;color:#991b1b}
-.hidden{display:none!important}.info{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin-top:13px}.info>div,.kpi{background:#f8fafc;border:1px solid var(--bd);border-radius:11px;padding:11px}.info label{display:block;color:var(--muted);font-size:10px}.info strong{font-size:13px}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:11px}.kpi b{display:block;font-size:20px}.kpi span{color:var(--muted);font-size:11px}
-.wrap{overflow:auto;border:1px solid var(--bd);border-radius:11px;margin-top:13px}table{width:100%;border-collapse:collapse;min-width:1080px}th,td{padding:9px 10px;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}th{background:#f8fafc;font-size:11px;white-space:nowrap}
-.badge{display:inline-block;padding:4px 8px;border-radius:99px;font-size:10px;font-weight:800}.ok{background:#ecfdf3;color:#166534}.warn{background:#fff7ed;color:#9a3412}
-.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.sectionbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-progress{width:100%;height:9px}.raw{white-space:pre-wrap;background:#0f172a;color:#dbeafe;padding:12px;border-radius:9px;max-height:300px;overflow:auto;font-size:11px}
-footer{text-align:center;color:#98a2b3;font-size:11px}.map{height:380px;border-radius:12px;overflow:hidden;background:#e8eef7;margin-top:13px}
-@media(max-width:850px){.info{grid-template-columns:repeat(2,1fr)}.kpis{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.info,.kpis{grid-template-columns:1fr}.hero h2{font-size:23px}}
-@media print{header,.hero,#upload,#settings,#mapUpload,#ownerSelect,#rawCard,.printHide,footer{display:none!important}.card{border:0;box-shadow:none}}
-</style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BhoomiTrace — भूमि अभिलेख विश्लेषण</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<header>
- <div class="brand"><div class="logo">B</div><div><h1>BhoomiTrace</h1><small>Uttarakhand Land Record Analyzer</small></div></div>
- <button class="btn danger" id="resetBtn">New Request</button>
+
+<header class="topbar">
+  <div class="topbar__brand">
+    <span class="topbar__mark">भू</span>
+    <div>
+      <div class="topbar__name">BhoomiTrace</div>
+      <div class="topbar__tagline">भूमि अभिलेख विश्लेषण उपकरण</div>
+    </div>
+  </div>
 </header>
-<main>
-<div class="hero"><h2>Khatoni → Ansh → Bhu-Naksha → Report</h2><p>सारा land data uploaded documents से पढ़ा जाएगा। कोई sample record hard-code नहीं है।</p></div>
 
-<section class="card" id="upload">
-<h3>1. Khatoni Upload</h3><div class="hint">PDF / JPG / JPEG · multiple files · multi-page PDF · max 5 MB/file</div>
-<label class="drop" for="khatoni" tabindex="0">
- <div class="ico">📄</div><b>Choose Khatoni files</b><br><span class="hint">Text PDF और scanned PDF दोनों</span>
- <input id="khatoni" type="file" accept=".pdf,.jpg,.jpeg,application/pdf,image/jpeg" multiple hidden>
-</label>
-<div id="kFiles" class="files"></div><div id="kProg" class="hidden"><div id="kProgText" class="hint"></div><progress id="kProgress" value="0" max="100"></progress></div>
-<div id="kStatus" class="notice hidden"></div>
-</section>
-
-<section class="card">
-<h3>Reading engine</h3>
-<div class="hint">PDF.js text extraction + Tesseract OCR fallback. OCR is intentionally conservative and flags uncertain rows.</div>
-<div class="notice warning">GitHub Pages is a static site. Processing happens in the browser; there is no server/database in this version.</div>
-<label><input id="forceOCR" type="checkbox"> Always use OCR</label>
-</section>
-
-<section class="card hidden" id="metaCard">
-<h3>2. Khatoni Header</h3><div class="info">
-<div><label>जनपद</label><strong id="district">—</strong></div><div><label>परगना</label><strong id="pargana">—</strong></div>
-<div><label>तहसील</label><strong id="tehsil">—</strong></div><div><label>ग्राम</label><strong id="village">—</strong></div><div><label>फसली वर्ष</label><strong id="fasli">—</strong></div>
+<div class="disclaimer">
+  BhoomiTrace एक स्वतंत्र दस्तावेज़-विश्लेषण उपकरण है और यह कोई सरकारी वेबसाइट नहीं है।
+  <span class="disclaimer__en">(BhoomiTrace is an independent document-analysis tool and is not a government website.)</span>
 </div>
-<div class="kpis"><div class="kpi"><b id="khataCount">0</b><span>Khata</span></div><div class="kpi"><b id="plotCount">0</b><span>Plot records</span></div><div class="kpi"><b id="ownerCount">0</b><span>Khata Dharak</span></div><div class="kpi"><b id="verifyCount">0</b><span>Needs verification</span></div></div>
-</section>
 
-<section class="card hidden" id="ownerCard">
-<h3>3. Every Khata Dharak — Ansh Calculation</h3>
-<div class="hint">Explicit share होने पर ही area × share calculate होगा। Multiple owners देखकर बराबर हिस्सा assume नहीं किया जाएगा।</div>
-<div class="wrap"><table><thead><tr><th>Khata</th><th>Khata Dharak</th><th>Father/Husband</th><th>Plots</th><th>Total Khata Area</th><th>Recorded Ansh</th><th>Ansh Area</th><th>Status</th></tr></thead><tbody id="ownerBody"></tbody></table></div>
-</section>
+<nav class="steps" aria-label="प्रक्रिया के चरण">
+  <div class="step" data-step="1"><span class="step__dot">1</span><span class="step__label">खतौनी</span></div>
+  <div class="step" data-step="2"><span class="step__dot">2</span><span class="step__label">निष्कर्षण</span></div>
+  <div class="step" data-step="3"><span class="step__dot">3</span><span class="step__label">विवरण</span></div>
+  <div class="step" data-step="4"><span class="step__dot">4</span><span class="step__label">अंश</span></div>
+  <div class="step step--future" data-step="5"><span class="step__dot">5</span><span class="step__label">प्लॉट चयन</span></div>
+  <div class="step step--future" data-step="6"><span class="step__dot">6</span><span class="step__label">भू-नक्शा</span></div>
+  <div class="step step--future" data-step="7"><span class="step__dot">7</span><span class="step__label">रिपोर्ट</span></div>
+</nav>
 
-<section class="card hidden" id="plotsCard">
-<div class="sectionbar"><div><h3>4. Select Required Plots</h3><div class="hint">Plot numbers केवल uploaded Khatoni से आते हैं।</div></div>
-<div><button class="btn secondary" id="selectAll">Select all</button> <button class="btn ghost" id="clearAll">Clear</button></div></div>
-<div class="wrap"><table><thead><tr><th>Select</th><th>Source</th><th>Khata</th><th>Owner</th><th>Father/Husband</th><th>Plot/Khasra</th><th>Area</th><th>Ansh</th><th>Confidence</th></tr></thead><tbody id="plotBody"></tbody></table></div>
-</section>
+<main class="container">
 
-<section class="card hidden" id="mapUpload">
-<h3>5. Bhu-Naksha / eBhunaksha</h3><div class="hint">PDF / JPG / JPEG / PNG · multiple files · max 5 MB/file</div>
-<div id="selectedNotice" class="notice"></div>
-<label class="drop" for="maps" tabindex="0"><div class="ico">🗺️</div><b>Choose map files</b><br><span class="hint">Matching: Khata No. + Plot/Khasra No.</span>
-<input id="maps" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" multiple hidden></label>
-<div id="mFiles" class="files"></div><div id="mProg" class="hidden"><div id="mProgText" class="hint"></div><progress id="mProgress" value="0" max="100"></progress></div><div id="mStatus" class="notice hidden"></div>
-</section>
+  <section class="card" id="uploadCard">
+    <h2 class="card__title">खतौनी अपलोड करें</h2>
+    <p class="card__hint">PDF या JPG · अधिकतम 5 MB प्रति फ़ाइल · एक से अधिक फ़ाइलें चुन सकते हैं</p>
+    <label class="upload-drop" for="khatoniInput">
+      <span class="upload-drop__icon">⬆</span>
+      <span class="upload-drop__text">फ़ाइलें चुनने के लिए यहाँ टैप करें</span>
+      <span class="upload-drop__sub">Tap to choose Khatoni files</span>
+    </label>
+    <input type="file" id="khatoniInput" accept=".pdf,.jpg,.jpeg" multiple hidden />
+    <div id="fileListBox" class="file-list"></div>
+  </section>
 
-<section class="card hidden" id="matchCard"><h3>6. Map Matching & Coordinates</h3>
-<div class="wrap"><table><thead><tr><th>Plot</th><th>Khata</th><th>Map Source</th><th>Latitude</th><th>Longitude</th><th>Polygon Boundary</th><th>Verification</th></tr></thead><tbody id="matchBody"></tbody></table></div>
-</section>
+  <section class="card" id="extractionSection" hidden>
+    <h2 class="card__title">निष्कर्षण प्रगति</h2>
+    <div class="progress-line" id="progressLine">तैयार हो रहा है…</div>
+  </section>
 
-<section class="card hidden" id="ownerSelect">
-<h3>7. Select Khata Dharak</h3><select id="owner" style="width:100%;margin-top:10px"><option value="">Select...</option></select>
-</section>
-<section class="card hidden" id="generateCard"><button class="btn primary" id="generate" style="width:100%">Generate Detailed Report</button></section>
+  <section class="card" id="ocrRawSection" hidden>
+    <h2 class="card__title">OCR कच्चा पाठ <span class="card__badge-warn">सत्यापन आवश्यक</span></h2>
+    <p class="card__hint">इन पृष्ठों की तालिका संरचना स्वतः नहीं पहचानी जा सकी; कृपया मूल दस्तावेज़ से मिलान करें।
+      (Table structure could not be reconstructed automatically for these OCR pages — please verify against the original.)</p>
+    <div id="ocrRawBox"></div>
+  </section>
 
-<section class="card hidden" id="report">
-<div class="sectionbar"><div><h3>Detailed Land Report</h3><div class="hint">Source-backed one-time report</div></div><div class="actions printHide"><button class="btn secondary" id="mapBtn">Show data in Google Map</button><button class="btn ghost" onclick="window.print()">Print / Save PDF</button></div></div>
-<div class="info"><div><label>District</label><strong id="rd">—</strong></div><div><label>Pargana</label><strong id="rp">—</strong></div><div><label>Tehsil</label><strong id="rt">—</strong></div><div><label>Village</label><strong id="rv">—</strong></div><div><label>Fasli</label><strong id="rf">—</strong></div></div>
-<div class="kpis"><div class="kpi"><b id="rArea">—</b><span>Selected area</span></div><div class="kpi"><b id="rShare">—</b><span>Ansh area</span></div><div class="kpi"><b id="rPlots">—</b><span>Plots</span></div><div class="kpi"><b id="rCoords">—</b><span>Coordinates</span></div></div>
-<div class="wrap"><table><thead><tr><th>Khata</th><th>Plot</th><th>Area</th><th>Recorded Ansh</th><th>Ansh Area</th><th>Latitude</th><th>Longitude</th><th>Source</th><th>Status</th></tr></thead><tbody id="reportBody"></tbody></table></div>
-<div id="map" class="map hidden"></div>
-<div class="notice warning"><b>Important:</b> coordinates are never guessed. Point coordinates are not polygon boundaries. This is an analytical tool, not an official government record.</div>
-</section>
+  <section class="card" id="plotsSection" hidden>
+    <h2 class="card__title">निकाले गए प्लॉट (Extracted Plots)</h2>
+    <div class="table-actions">
+      <button class="btn btn--ghost" id="selectAllPlots">सभी चुनें</button>
+      <button class="btn btn--ghost" id="clearAllPlots">सभी हटाएं</button>
+    </div>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>चयन</th><th>फ़ाइल</th><th>पृष्ठ</th><th>खाता</th>
+            <th>खातेदार</th><th>पिता/पति</th><th>खसरा</th><th>क्षेत्रफल (हे.)</th>
+            <th>अंश पाठ</th><th>स्थिति</th>
+          </tr>
+        </thead>
+        <tbody id="plotsTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+  <p id="noPlotsNote" class="empty-note" hidden>कोई प्लॉट नहीं मिला। कृपया फ़ाइल की गुणवत्ता जाँचें।</p>
 
-<section class="card hidden" id="rawCard"><div class="sectionbar"><div><h3>Source Text / Audit Trail</h3><div class="hint">Use this to inspect OCR output.</div></div><button class="btn ghost" id="rawBtn">Show/Hide</button></div><pre id="raw" class="raw hidden"></pre></section>
-<footer>BhoomiTrace · browser/session processing · no permanent land-record database</footer>
+  <section class="card" id="anshSection" hidden>
+    <h2 class="card__title">खाता धारक अंश सारांश (Ansh Summary)</h2>
+    <div class="table-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>खाता</th><th>खातेदार</th><th>पिता/पति</th><th>प्लॉट</th>
+            <th>कुल खाता क्षेत्रफल</th><th>दर्ज अंश पाठ</th><th>गणना अंश क्षेत्रफल</th><th>स्थिति</th>
+          </tr>
+        </thead>
+        <tbody id="anshTableBody"></tbody>
+      </table>
+    </div>
+    <p class="card__hint">"निर्धारित नहीं" या "सत्यापन आवश्यक" अंकित पंक्तियों का अर्थ है कि दस्तावेज़ में
+      स्पष्ट, गणना-योग्य हिस्सा नहीं दिया गया — बराबर बाँट कर अंश कभी नहीं निकाला जाता।</p>
+  </section>
+
+  <section class="card card--muted">
+    <h2 class="card__title">आगे के चरण (Phase 2)</h2>
+    <p>प्लॉट चयन, भू-नक्शा/eBhunaksha अपलोड, मानचित्र मिलान, अंतिम रिपोर्ट, Google Map और प्रिंट/PDF — ये अगले चरण में जोड़े जाएंगे।</p>
+  </section>
+
+  <section class="card card--privacy">
+    <h2 class="card__title">गोपनीयता (Privacy)</h2>
+    <p>सभी फ़ाइलें केवल आपके ब्राउज़र में, इसी सत्र (session) के लिए संसाधित होती हैं। कोई डेटा सर्वर पर नहीं भेजा जाता,
+      कोई स्थायी भंडारण (permanent storage) नहीं है, और पेज बंद/रीलोड करने पर सारा डेटा मिट जाता है।</p>
+  </section>
+
 </main>
 
-<script>
-const MAX=5*1024*1024;
-let K=[],M=[],P=[],R=[],selected=[],groups=[],META={};
-const $=id=>document.getElementById(id);
-const esc=v=>String(v??"").replace(/[&<>"']/g,x=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[x]));
-const norm=v=>String(v??"").normalize("NFKC").replace(/\\s+/g," ").trim().toLowerCase();
-const num=v=>{let m=String(v??"").replace(/,/g,"").match(/-?\\d+(?:\\.\\d+)?/);return m?Number(m[0]):null};
-const fraction=v=>{if(v==null||v==="")return null;if(typeof v==="number")return v>1&&v<=100?v/100:v;let m=String(v).match(/(\\d+)\\s*\\/\\s*(\\d+)/);if(m)return Number(m[1])/Number(m[2]);let n=Number(v);return Number.isFinite(n)?(n>1&&n<=100?n/100:n):null};
-const fmt=v=>v==null||Number.isNaN(v)?"—":Number(v).toLocaleString("en-IN",{maximumFractionDigits:8});
-function status(id,t,c=""){ $(id).textContent=t;$(id).className="notice "+c;$(id).classList.remove("hidden") }
-function fileList(id,a){$(id).innerHTML=a.map(f=>`<div class="file"><span>📎 ${esc(f.name)}</span><span>${Math.ceil(f.size/1024)} KB</span></div>`).join("")}
-function valid(f,types){if(f.size>MAX){alert(f.name+" is over 5 MB.");return false}return types.some(x=>f.type===x||f.name.toLowerCase().endsWith(x))}
-$("khatoni").addEventListener("change",async e=>{for(const f of e.target.files)if(valid(f,["application/pdf","image/jpeg",".pdf",".jpg",".jpeg"]))K.push(f);fileList("kFiles",K);if(K.length)await processK()});
-$("maps").addEventListener("change",async e=>{for(const f of e.target.files)if(valid(f,["application/pdf","image/jpeg","image/png",".pdf",".jpg",".jpeg",".png"]))M.push(f);fileList("mFiles",M);if(M.length)await processM()});
-$("selectAll").onclick=()=>{document.querySelectorAll(".plotbox").forEach(x=>x.checked=true);sync()};
-$("clearAll").onclick=()=>{document.querySelectorAll(".plotbox").forEach(x=>x.checked=false);sync()};
-$("resetBtn").onclick=()=>{if(confirm("Clear this session?"))location.reload()};
-$("rawBtn").onclick=()=>$("raw").classList.toggle("hidden");
-$("generate").onclick=generate;
+<footer class="footer">BhoomiTrace · स्वतंत्र दस्तावेज़-विश्लेषण उपकरण · कोई स्थायी भंडारण नहीं</footer>
 
-async function processK(){
- P=[];$("kProg").classList.remove("hidden");
- try{for(let i=0;i<K.length;i++){P.push(...await readDoc(K[i]));$("kProgress").value=(i+1)/K.length*100;$("kProgText").textContent=`Reading ${K[i].name} · ${i+1}/${K.length}`}}
- catch(e){console.error(e);status("kStatus","Reading error: "+e.message,"error");return}
- R=parseKhatoni(P);buildMeta();renderAll();
- $("raw").textContent=P.map(p=>`===== ${p.file} · PAGE ${p.page} · ${p.method} =====\\n${p.text}`).join("\\n\\n");
- $("rawCard").classList.remove("hidden");status("kStatus",`${P.length} page(s) read · ${R.length} record(s) extracted.`,"success");
-}
-async function processM(){
- let pages=[];$("mProg").classList.remove("hidden");
- try{for(let i=0;i<M.length;i++){pages.push(...await readDoc(M[i]));$("mProgress").value=(i+1)/M.length*100;$("mProgText").textContent=`Reading ${M[i].name} · ${i+1}/${M.length}`}}
- catch(e){status("mStatus","Reading error: "+e.message,"error");return}
- const parsed=parseMaps(pages);window.mapRecords=parsed;renderMatches();$("matchCard").classList.remove("hidden");
- status("mStatus",`${pages.length} map page(s) read · ${parsed.length} map record(s) extracted.`,"success");
-}
-async function readDoc(file){if(file.type==="application/pdf"||file.name.toLowerCase().endsWith(".pdf"))return readPDF(file);return [{file:file.name,page:1,method:"OCR",text:await ocr(file)}]}
-async function readPDF(file){
- if(!window.pdfjsLib)await new Promise(r=>setTimeout(r,1000));
- if(!window.pdfjsLib)throw new Error("PDF.js did not load. Check internet connection.");
- const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise,out=[];
- for(let i=1;i<=pdf.numPages;i++){let pg=await pdf.getPage(i),tc=await pg.getTextContent(),txt=tc.items.map(x=>x.str).join(" ");
-  if($("forceOCR").checked||txt.replace(/\\s/g,"").length<80){let vp=pg.getViewport({scale:1.65}),c=document.createElement("canvas");c.width=Math.ceil(vp.width);c.height=Math.ceil(vp.height);await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;txt=await ocr(c.toDataURL("image/png"));out.push({file:file.name,page:i,method:"OCR",text:txt})}
-  else out.push({file:file.name,page:i,method:"PDF text",text:txt});
- }return out
-}
-async function ocr(blob){
- if(!window.Tesseract)throw new Error("OCR library did not load. Check internet connection.");
- const r=await Tesseract.recognize(blob,"hin+eng");return r.data.text||""
-}
-function headers(t){
- const get=(a)=>{for(const x of a){let m=t.match(new RegExp(x+"\\\\s*[:：-]?\\\\s*([^\\\\n|]{1,80})","i"));if(m)return m[1].trim()}return""};
- return {district:get(["जनपद","जिला","District"]),pargana:get(["परगना","Pargana"]),tehsil:get(["तहसील","Tehsil"]),village:get(["ग्राम","गाँव","Village"]),fasliYear:get(["फसली वर्ष","फसली","Fasli Year"])}
-}
-function khata(t){let m=t.match(/(?:खाता\\s*(?:संख्या|नं\\.?|नम्बर)?|Khata\\s*(?:No\\.?|Number)?)\\s*[:：-]?\\s*(\\d{3,8})/i);return m?m[1].padStart(5,"0"):""}
-function plot(t){let m=t.match(/(?:खसरा|गाटा\\s*संख्या|Khasra|Plot)\\s*(?:संख्या|नं\\.?|No\\.?|Number)?\\s*[:：-]?\\s*(\\d{1,8})/i);return m?m[1]:""}
-function area(t){let m=t.match(/(\\d+(?:\\.\\d{2,6})?)\\s*(हेक्ट(?:ेयर)?|हे\\.?|Hect(?:are)?\\.?|Acre|एकड़)?/i);return m?{v:Number(m[1]),u:m[2]||""}:{v:null,u:""}}
-function share(t){let m=t.match(/(?:अंश|हिस्सा|share)\\s*[:：-]?\\s*(\\d+)\\s*\\/\\s*(\\d+)/i)||t.match(/\\b(\\d+)\\s*\\/\\s*(\\d+)\\s*(?:हि\\.?|हिस्सा|share)\\b/i);return m?{f:Number(m[1])/Number(m[2]),s:m[1]+"/"+m[2],flag:true}:{f:null,s:"",flag:false}}
-function owner(t,pl){let left=t.split(pl)[0].trim(),f=left.match(/(?:पुत्र|पिता|पत्नी|पति|Father|Husband|W\\/o|S\\/o|D\\/o)\\s*[:：-]?\\s*([^,;|]+)/i),name=f?left.slice(0,f.index).trim():left;return{name:name.replace(/^[,;|\\- ]+|[,;|\\- ]+$/g,""),father:f?f[1].trim():""}}
-function parseKhatoni(ps){
- let out=[],lastKh="";
- for(const p of ps){let t=p.text;let h=headers(t),k=khata(t);if(k)lastKh=k;let lines=t.split(/\\r?\\n/).map(x=>x.trim()).filter(Boolean);
-  for(let line of lines){let pl=plot(line);if(!pl)continue;let a=area(line),o=owner(line,pl),s=share(line),c=(pl?0.45:0)+(a.v!=null?.25:0)+(o.name?.25:0);
-   out.push({khataNo:k||lastKh,owner:o.name,fatherHusband:o.father,plotNo:pl,area:a.v,areaUnit:a.u,shareFraction:s.f,shareText:s.s,
-    sourceFile:p.file,sourcePage:p.page,sourceMethod:p.method,sourceText:line,confidence:Math.min(c,1),needsVerification:c<.8})}
- }
- return out.filter(r=>r.plotNo||r.owner||r.area!=null)
-}
-function parseMaps(ps){
- let out=[];for(const p of ps){let t=p.text,plots=[...t.matchAll(/(?:खसरा|Khasra|Plot)\\s*(?:No\\.?|Number|संख्या|नं\\.?)?\\s*[:：-]?\\s*(\\d{1,8})/gi)].map(m=>m[1]);
-  let k=khata(t),la=(t.match(/(?:MAP\\s*REPORT\\s*)?(?:lat(?:itude)?|अक्षांश)\\s*[:=|]?\\s*(-?\\d{1,3}\\.\\d{3,12})/i)||[])[1],lo=(t.match(/(?:lng|long(?:itude)?|देशांतर)\\s*[:=|]?\\s*(-?\\d{1,3}\\.\\d{3,12})/i)||[])[1];
-  (plots.length?plots:[""]).forEach(pl=>out.push({plotNo:pl,khataNo:k,latitude:la==null?null:Number(la),longitude:lo==null?null:Number(lo),polygonBoundary:[],sourceFile:p.file,sourcePage:p.page,needsVerification:!la||!lo}))
- }return out
-}
-function buildMeta(){let m={};for(const p of P)m={...m,...headers(p.text)};META=m;["district","pargana","tehsil","village","fasliYear"].forEach(x=>$(x==="fasliYear"?"fasli":x).textContent=META[x]||"Not available");$("metaCard").classList.remove("hidden")}
-function groupsBuild(){let m=new Map();R.forEach((r,i)=>{let key=[norm(r.khataNo),norm(r.owner),norm(r.fatherHusband)].join("|");if(!m.has(key))m.set(key,{key,khataNo:r.khataNo,owner:r.owner,fatherHusband:r.fatherHusband,ids:[],plots:[],area:0,share:0,explicit:true});let g=m.get(key);g.ids.push(i);g.plots.push(r);if(r.area!=null)g.area+=r.area;let f=fraction(r.shareFraction);if(f==null)g.explicit=false;else if(r.area!=null)g.share+=r.area*f});return[...m.values()]}
-function renderAll(){groups=groupsBuild();$("khataCount").textContent=new Set(R.map(r=>r.khataNo).filter(Boolean)).size;$("plotCount").textContent=R.length;$("ownerCount").textContent=groups.length;$("verifyCount").textContent=R.filter(r=>r.needsVerification).length;
- $("ownerBody").innerHTML=groups.map(g=>`<tr><td>${esc(g.khataNo||"—")}</td><td>${esc(g.owner||"—")}</td><td>${esc(g.fatherHusband||"—")}</td><td>${g.plots.map(r=>esc(r.plotNo)).join(", ")}</td><td>${fmt(g.area)}</td><td>${g.plots.map(r=>esc(r.shareText||"Not determinable")).join("<br>")}</td><td>${g.explicit?fmt(g.share):"—"}</td><td><span class="badge ${g.explicit?"ok":"warn"}">${g.explicit?"Calculated":"Not Determinable"}</span></td></tr>`).join("");
- $("plotBody").innerHTML=R.map((r,i)=>`<tr><td><input class="plotbox" data-i="${i}" type="checkbox"></td><td>${esc(r.sourceFile)}<div class="hint">p.${r.sourcePage} · ${r.sourceMethod}</div></td><td>${esc(r.khataNo||"—")}</td><td>${esc(r.owner||"—")}</td><td>${esc(r.fatherHusband||"—")}</td><td><b>${esc(r.plotNo||"—")}</b></td><td>${esc(r.area??"—")} ${esc(r.areaUnit)}</td><td>${esc(r.shareText||"Not determinable")}</td><td><span class="badge ${r.needsVerification?"warn":"ok"}">${r.needsVerification?"Needs Verification":Math.round(r.confidence*100)+"%"}</span></td></tr>`).join("");
- $("owner").innerHTML='<option value="">Select...</option>'+groups.map((g,i)=>`<option value="${i}">${esc(g.owner||"Unnamed")} · ${esc(g.fatherHusband||"—")} · Khata ${esc(g.khataNo||"—")}</option>`).join("");
- $("plotsCard").classList.remove("hidden")}
-function sync(){selected=[...document.querySelectorAll(".plotbox:checked")].map(x=>+x.dataset.i);$("mapUpload").classList.toggle("hidden",!selected.length);$("selectedNotice").textContent=selected.length?"Selected plots: "+selected.map(i=>R[i].plotNo).join(", "):"Select plots first";if(M.length)renderMatches()}
-function mapFor(r){return(window.mapRecords||[]).find(m=>norm(m.plotNo)===norm(r.plotNo)&&norm(m.khataNo)===norm(r.khataNo))||(window.mapRecords||[]).find(m=>norm(m.plotNo)===norm(r.plotNo))}
-function renderMatches(){$("matchBody").innerHTML=selected.map(i=>{let r=R[i],m=mapFor(r);if(!m)return`<tr><td>${esc(r.plotNo)}</td><td>${esc(r.khataNo)}</td><td>—</td><td>—</td><td>—</td><td>Not available</td><td><span class="badge warn">Map matching required</span></td></tr>`;let c=m.latitude!=null&&m.longitude!=null;return`<tr><td>${esc(r.plotNo)}</td><td>${esc(r.khataNo)}</td><td>${esc(m.sourceFile)} p.${m.sourcePage}</td><td>${c?m.latitude:"No Lat/Long Available"}</td><td>${c?m.longitude:"No Lat/Long Available"}</td><td>${m.polygonBoundary.length?m.polygonBoundary.length+" vertices":"Not available"}</td><td><span class="badge ${m.needsVerification?"warn":"ok"}">${m.needsVerification?"Needs Verification":"Matched"}</span></td></tr>`}).join("")}
-$("maps").addEventListener("change",()=>{});
-document.addEventListener("change",e=>{if(e.target.classList.contains("plotbox"))sync();if(e.target.id==="owner")$("generateCard").classList.toggle("hidden",!e.target.value)})
-function generate(){let gi=$("owner").value;if(gi===""){alert("Select Khata Dharak.");return}let g=groups[+gi],ids=g.ids.filter(i=>selected.includes(i));if(!ids.length){alert("Select this owner's plots first.");return}
- let total=0,sa=0,all=true,co=0;$("reportBody").innerHTML=ids.map(i=>{let r=R[i],f=fraction(r.shareFraction),a=r.area,m=mapFor(r),has=m&&m.latitude!=null&&m.longitude!=null;if(a!=null)total+=a;if(f==null)all=false;else if(a!=null)sa+=a*f;if(has)co++;return`<tr><td>${esc(r.khataNo)}</td><td>${esc(r.plotNo)}</td><td>${esc(r.area??"—")} ${esc(r.areaUnit)}</td><td>${esc(r.shareText||"Not determinable")}</td><td>${f!=null&&a!=null?fmt(a*f):"—"}</td><td>${has?m.latitude:"No Lat/Long Available"}</td><td>${has?m.longitude:"No Lat/Long Available"}</td><td>${esc(r.sourceFile)} p.${r.sourcePage}</td><td><span class="badge ${r.needsVerification||!m?"warn":"ok"}">${!m?"Map matching required":r.needsVerification?"Needs Verification":"Source matched"}</span></td></tr>`}).join("");
- $("rd").textContent=META.district||"Not available";$("rp").textContent=META.pargana||"Not available";$("rt").textContent=META.tehsil||"Not available";$("rv").textContent=META.village||"Not available";$("rf").textContent=META.fasliYear||"Not available";$("rArea").textContent=fmt(total);$("rShare").textContent=all?fmt(sa):"Not determinable";$("rPlots").textContent=ids.length;$("rCoords").textContent=co;$("report").classList.remove("hidden");$("report").scrollIntoView({behavior:"smooth"})}
-$("mapBtn").onclick=()=>alert("Google Maps integration needs a Google Maps API key. Coordinates are already shown in the report; no coordinate is fabricated.");
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 </script>
-<!-- PDF.js and Tesseract are loaded from public CDNs. GitHub Pages does not need a backend for this browser-only version. -->
-<script type="module">
-import * as pdfjsLib from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
-pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
-window.pdfjsLib=pdfjsLib;
-</script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.4/tesseract.min.js"></script>
+
+<script src="js/documentLoader.js"></script>
+<script src="js/pdfTextExtractor.js"></script>
+<script src="js/textIntegrityChecker.js"></script>
+<script src="js/ocrProcessor.js"></script>
+<script src="js/khatoniHeaderParser.js"></script>
+<script src="js/shareParser.js"></script>
+<script src="js/ownerIdentityResolver.js"></script>
+<script src="js/khatoniTableParser.js"></script>
+<script src="js/revenueCalculator.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>
