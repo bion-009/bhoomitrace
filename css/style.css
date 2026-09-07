@@ -146,6 +146,56 @@ body {
 }
 .btn--ghost { background: var(--bg); border: 1px solid var(--line); color: var(--ink); }
 .btn--ghost:active { background: var(--line); }
+.btn--primary { background: var(--accent); color: #fff; }
+.btn--primary:active { background: var(--accent-deep); }
+
+.radio-list { display: flex; flex-direction: column; gap: 8px; }
+.radio-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.radio-row input { width: 20px; height: 20px; flex-shrink: 0; }
+
+.report-header {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  font-size: 0.9rem;
+  background: #F6F2E6;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 14px;
+}
+@media (min-width: 560px) {
+  .report-header { grid-template-columns: 1fr 1fr; }
+}
+
+.map-link {
+  display: block;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #F6F2E6;
+  border-radius: 8px;
+  color: var(--accent-deep);
+  text-decoration: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+}
+.map-link:active { background: var(--line); }
+
+@media print {
+  .no-print, .topbar, .disclaimer, .steps, #uploadCard, #extractionSection,
+  #ocrRawSection, #plotsSection, #noPlotsNote, #anshSection, #bhunakshaSection,
+  #matchingSection, #khataDharakSection, .footer {
+    display: none !important;
+  }
+  body { background: #fff; }
+  .card.printable { border: none; padding: 0; }
+}
 
 .table-scroll { overflow-x: auto; }
 .data-table {
